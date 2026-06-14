@@ -36,7 +36,7 @@ export default function Dashboard() {
       const { data, error } = await supabase
         .from('sales')
         .select('*')
-        .order('timestamp', { ascending: false });
+        .order('date', { ascending: false });
 
       if (error) console.error('Erreur fetch:', error);
       else setSales(data || []);
