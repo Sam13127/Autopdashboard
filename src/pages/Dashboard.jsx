@@ -15,6 +15,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [period, setPeriod] = useState('30');
 
   // Auth state
   const [user, setUser] = useState(null);
@@ -89,8 +90,21 @@ export default function Dashboard() {
     };
   }, []);
 
+  // Ventes filtrées selon la période sélectionnée
+  const filteredSales = useMemo(() => {
+    if (period === 'all') return sales;
+    const now = new Date();
+    const cutoff = new Date(now);
+    cutoff.setDate(cutoff.getDate() - parseInt(period));
+    return sales.filter(s => {
+      const d = new Date(s.date);
+      return !isNaN(d.getTime()) && d >= cutoff;
+    });
+  }, [sales, period]);
+
   // Logical KPIs
   const kpis = useMemo(() => {
+    const sales = filteredSales;
     if (sales.length === 0) {
       return {
         totalVehicles: 0, totalCA: 0, avgPrice: 0, avgDays: 0, bestChannel: '-',
@@ -132,7 +146,7 @@ export default function Dashboard() {
     }).length;
 
     return { totalVehicles: sales.length, totalCA, avgPrice, avgDays, bestChannel, rotationRate, avgMargin, monthSales };
-  }, [sales]);
+  }, [filteredSales]);
 
   const stockKpis = useMemo(() => {
     const now = new Date();
@@ -148,10 +162,10 @@ export default function Dashboard() {
   const channelStats = useMemo(() => {
     const stats = {};
     CHANNELS.forEach(c => stats[c] = 0);
-    sales.forEach(s => { if (s.channel && stats[s.channel] !== undefined) stats[s.channel] += 1; });
+    filteredSales.forEach(s => { if (s.channel && stats[s.channel] !== undefined) stats[s.channel] += 1; });
     const max = Math.max(...Object.values(stats), 1);
     return { stats, max };
-  }, [sales]);
+  }, [filteredSales]);
 
   const handleChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
 
@@ -210,13 +224,25 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold tracking-tight mb-1 text-text-primary">Vue d'ensemble</h1>
             <p className="text-text-secondary">Suivi des ventes en temps réel — Auto'P Automobile</p>
           </div>
-          <button
-            onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-white px-5 py-2.5 rounded-xl font-medium shadow-lg shadow-accent/20 transition-all active:scale-95"
-          >
-            <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" strokeLinecap="round"/></svg>
-            Nouvelle Vente
-          </button>
+          <div className="flex items-center gap-3">
+            <select
+              value={period}
+              onChange={(e) => setPeriod(e.target.value)}
+              className="bg-surface border border-gray-200 text-text-primary text-sm font-medium rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent/30"
+            >
+              <option value="7">7 derniers jours</option>
+              <option value="30">30 derniers jours</option>
+              <option value="90">90 derniers jours</option>
+              <option value="all">Depuis le début</option>
+            </select>
+            <button
+              onClick={() => setShowForm(true)}
+              className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-white px-5 py-2.5 rounded-xl font-medium shadow-lg shadow-accent/20 transition-all active:scale-95"
+            >
+              <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" strokeLinecap="round"/></svg>
+              Nouvelle Vente
+            </button>
+          </div>
         </div>
 
         {/* KPIs */}
