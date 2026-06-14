@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Assistant from './pages/Assistant';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -18,6 +19,16 @@ function App() {
               <Dashboard />
             </ProtectedRoute>
           } 
+        />
+
+        {/* Route protégée de l'Assistant */}
+        <Route
+          path="/assistant"
+          element={
+            <ProtectedRoute>
+              <Assistant />
+            </ProtectedRoute>
+          }
         />
 
         {/* Redirection des routes inconnues */}

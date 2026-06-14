@@ -28,30 +28,33 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl p-8 relative overflow-hidden">
+    <div className="min-h-screen bg-bg flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-surface border border-gray-200 rounded-2xl shadow-xl p-8 relative overflow-hidden">
         {/* Decorative blur */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-accent/20 rounded-full blur-3xl"></div>
-        
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-accent/10 rounded-full blur-3xl"></div>
+
         <div className="relative z-10">
           <div className="text-center mb-10">
-            <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Auto'P</h1>
-            <p className="text-gray-400">Connectez-vous à votre espace sécurisé</p>
+            <div className="w-12 h-12 bg-accent rounded-xl flex items-center justify-center font-bold text-xl text-white shadow-lg shadow-accent/20 mx-auto mb-4">
+              A
+            </div>
+            <h1 className="text-3xl font-bold text-text-primary mb-2 tracking-tight">Auto'P</h1>
+            <p className="text-text-secondary">Connectez-vous à votre espace sécurisé</p>
           </div>
 
           {error && (
-            <div className="bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-3 rounded-xl mb-6 text-sm">
+            <div className="bg-red-50 border border-red-200 text-danger px-4 py-3 rounded-xl mb-6 text-sm">
               {error}
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Email professionnel</label>
+              <label className="block text-sm font-medium text-text-secondary mb-2">Email professionnel</label>
               <input
                 type="email"
                 required
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-bg border border-gray-200 rounded-xl text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
                 placeholder="contact@autop.fr"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -59,11 +62,11 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Mot de passe</label>
+              <label className="block text-sm font-medium text-text-secondary mb-2">Mot de passe</label>
               <input
                 type="password"
                 required
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-bg border border-gray-200 rounded-xl text-text-primary focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent transition-all"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
